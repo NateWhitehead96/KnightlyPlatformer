@@ -1,4 +1,11 @@
-﻿using System.Collections;
+﻿/*Playercontroller
+ * Nathan Whitehead
+ * 101242269
+ * 11/20/20
+ * The player's controlling script for movement, animations, and anything else player related
+ */
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -74,6 +81,7 @@ public class PlayerController : MonoBehaviour
             grounded = true;
             jumping = false;
         }
+
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -90,6 +98,13 @@ public class PlayerController : MonoBehaviour
         {
             // fell on spikes right now will 1 shot you
             SceneManager.LoadScene("Lose");
+        }
+
+
+        if (other.gameObject.CompareTag("Coin")) // if colliding with coins add to score
+        {
+            Destroy(other.gameObject);
+            ScoreManager.score += 1;
         }
     }
 }

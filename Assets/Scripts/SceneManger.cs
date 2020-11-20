@@ -1,4 +1,11 @@
-﻿using System.Collections;
+﻿/*SceneManger
+ * Nathan Whitehead
+ * 101242269
+ * 11/20/20
+ * The script for all UI buttons for scene switching
+ */
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
