@@ -1,4 +1,4 @@
-﻿/*Playercontroller
+﻿/*ScoreManager
  * Nathan Whitehead
  * 101242269
  * 11/20/20
