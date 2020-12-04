@@ -1,7 +1,7 @@
 ﻿/*Playercontroller
  * Nathan Whitehead
  * 101242269
- * 12/2/20
+ * 12/4/20
  * The player's controlling script for movement, animations, and anything else player related
  */
 
@@ -130,7 +130,6 @@ public class PlayerController : MonoBehaviour
             grounded = true;
             jumping = false;
         }
-
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -151,6 +150,10 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(Hurt());
         }
 
+        if (other.gameObject.CompareTag("ExitDoor"))
+        {
+            SceneManager.LoadScene("Win");
+        }
 
         if (other.gameObject.CompareTag("Coin")) // if colliding with coins add to score
         {

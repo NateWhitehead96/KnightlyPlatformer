@@ -1,4 +1,11 @@
-﻿using System.Collections;
+﻿/*EnemyBehaviour
+ * Nathan Whitehead
+ * 101242269
+ * 12/4/20
+ * The Enemy AI and everything enemy
+ */
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,25 +25,29 @@ public class EnemyBehaviour : MonoBehaviour
     public LayerMask playerMask;
     public float attackRange;
 
+    public HealthBar healthBar;
+
 
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
         rigidbody = GetComponent<Rigidbody2D>();
+        healthBar.SetHealth(health, health);
     }
 
     // Update is called once per frame
     void Update()
     {
         Move();
-        if(health <= 0)
+        healthBar.SetHealth(health, 3);
+        if (health <= 0)
         {
             StartCoroutine(Death());
         }
     }
 
-    IEnumerator Death()
+    IEnumerator Death() // stops all other states and drops a coin
     {
         animator.SetInteger("EnemyState", 2);
         isMoving = false;
@@ -46,7 +57,7 @@ public class EnemyBehaviour : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void Move()
+    private void Move() // simple patrol AI similar to floating platform
     {
         if (isMoving && !isAttacking)
         {
@@ -74,7 +85,7 @@ public class EnemyBehaviour : MonoBehaviour
         }
     }
 
-    IEnumerator Swing()
+    IEnumerator Swing() // when the player enters the enemies colliders it will swing dealing 1 damage to the player
     {
         animator.SetInteger("EnemyState", 1); // set enemy to attack mode
         isMoving = false; // stop the movement
