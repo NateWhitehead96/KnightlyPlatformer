@@ -17,7 +17,11 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rigidbody;
     private SpriteRenderer sprite;
     private Animator animator;
-    private int lives = 3;
+    public int lives = 3;
+
+    public Transform attackPos;
+    public LayerMask enemyMask;
+    public float attackRange;
 
     public Joystick joystick;
     public float joystickHorizontalSensitivity;
@@ -98,6 +102,12 @@ public class PlayerController : MonoBehaviour
     {
         animator.SetInteger("AnimState", 4);
         attacking = true;
+        Collider2D[] enemies = Physics2D.OverlapCircleAll(attackPos.position, attackRange, enemyMask);
+        for (int i = 0; i < enemies.Length; i++)
+        {
+            enemies[i].GetComponent<EnemyBehaviour>().health -= 1;
+            //enemies[i].GetComponent<Rigidbody2D>().AddForce(Vector2.right * 2 * Time.deltaTime);
+        }
         yield return new WaitForSeconds(1f);
         attacking = false;
     }
@@ -149,11 +159,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
     IEnumerator Hurt()
     {
         animator.SetInteger("AnimState", 3);
         yield return new WaitForSeconds(1f);
         transform.position = new Vector3(-2.45f, -0.6f);
         animator.SetBool("isHurt", false);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(attackPos.position, attackRange);
     }
 }
