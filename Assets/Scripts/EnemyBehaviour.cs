@@ -1,7 +1,7 @@
 ﻿/*EnemyBehaviour
  * Nathan Whitehead
  * 101242269
- * 12/4/20
+ * 12/7/20
  * The Enemy AI and everything enemy
  */
 
@@ -26,7 +26,6 @@ public class EnemyBehaviour : MonoBehaviour
     public float attackRange;
 
     public HealthBar healthBar;
-
 
     // Start is called before the first frame update
     void Start()
@@ -73,7 +72,7 @@ public class EnemyBehaviour : MonoBehaviour
                 direction = 1;
                 transform.localScale = new Vector3(-0.03f, 0.03f, 1f);
             }
-            animator.SetInteger("EnemyState", 0);
+            animator.SetInteger("EnemyState", 0); // run animation
         }
     }
 
@@ -106,18 +105,5 @@ public class EnemyBehaviour : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(attackPos.position, attackRange);
     }
-
-    //private void OnTriggerStay2D(Collider2D collision)
-    //{
-    //    if (collision.gameObject.CompareTag("Player"))
-    //    {
-    //        if(isAttacking)
-    //        {
-    //            Debug.Log("Enemy is attacking!");
-    //            collision.gameObject.GetComponent<PlayerController>().lives -= 1;
-    //            collision.gameObject.GetComponent<Rigidbody2D>().AddForce(Vector2.right * direction * 5 * Time.deltaTime);
-    //        }
-    //    }
-    //}
 
 }

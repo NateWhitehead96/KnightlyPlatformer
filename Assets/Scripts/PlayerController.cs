@@ -1,7 +1,7 @@
 ﻿/*Playercontroller
  * Nathan Whitehead
  * 101242269
- * 12/4/20
+ * 12/7/20
  * The player's controlling script for movement, animations, and anything else player related
  */
 
@@ -35,6 +35,9 @@ public class PlayerController : MonoBehaviour
     public Image lives2;
     public Image lives3;
 
+    public AudioSource coinCollect;
+    public AudioSource enemyHurt;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -45,7 +48,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void FixedUpdate() // Will display your health in the UI and destroy icons based on missing health
     {
         Move();
         if(lives == 2)
@@ -94,19 +97,19 @@ public class PlayerController : MonoBehaviour
 
     public void AButton()
     {
-        // Attack button, but for now will switch to win scene
+        // Attack button, starts a coroutine for the attack animation and damage mechanic
         StartCoroutine(PlayerAttack());
     }
 
     IEnumerator PlayerAttack()
     {
-        animator.SetInteger("AnimState", 4);
+        animator.SetInteger("AnimState", 4); // attacking
         attacking = true;
-        Collider2D[] enemies = Physics2D.OverlapCircleAll(attackPos.position, attackRange, enemyMask);
+        Collider2D[] enemies = Physics2D.OverlapCircleAll(attackPos.position, attackRange, enemyMask); // create a small circle and if enemy is inside deal damage
         for (int i = 0; i < enemies.Length; i++)
         {
             enemies[i].GetComponent<EnemyBehaviour>().health -= 1;
-            //enemies[i].GetComponent<Rigidbody2D>().AddForce(Vector2.right * 2 * Time.deltaTime);
+            enemyHurt.Play();
         }
         yield return new WaitForSeconds(1f);
         attacking = false;
@@ -124,7 +127,7 @@ public class PlayerController : MonoBehaviour
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
-    {
+    { // our ground checks. no falling through floors here
         if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("MovingPlatform") || collision.gameObject.CompareTag("BreakingPlatform")) // if colliding with ground we're grounded and not jumping
         {
             grounded = true;
@@ -159,12 +162,13 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(other.gameObject);
             ScoreManager.score += 1;
+            coinCollect.Play();
         }
     }
 
 
     IEnumerator Hurt()
-    {
+    { // a coroutine that resets the player if they fall into spikes
         animator.SetInteger("AnimState", 3);
         yield return new WaitForSeconds(1f);
         transform.position = new Vector3(-2.45f, -0.6f);
@@ -172,7 +176,7 @@ public class PlayerController : MonoBehaviour
     }
 
     private void OnDrawGizmosSelected()
-    {
+    { // for dev purposes to see our attack radius
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(attackPos.position, attackRange);
     }
